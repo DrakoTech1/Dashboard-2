@@ -16,8 +16,26 @@ body {
 }
 .login-container {
   background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
+  padding: 40px;
   border-radius: 10px;
+}
+.login-container input {
+  margin: 10px 0;
+  padding: 15px;
+  width: 80%;
+  font-size: 16px;
+}
+.login-container button {
+  padding: 15px 30px;
+  background: #007bff;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.login-container button:hover {
+  background: #0056b3;
 }
 
 /* Sidebar for Dashboard & Dashboard2 */
