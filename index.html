@@ -9,8 +9,12 @@
 <body class="login-body">
   <div class="login-container">
     <h2>Welcome to Evilginx Dashboard</h2>
-    <input type="email" id="email" placeholder="Enter email" required />
-    <input type="password" id="password" placeholder="Enter password" required />
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Enter your email" required />
+    </div>
+    <div class="input-group">
+      <input type="password" id="password" placeholder="Enter your password" required />
+    </div>
     <button id="loginBtn" onclick="login()">Login</button>
     <p id="loginError" class="error-message"></p>
   </div>
@@ -19,7 +23,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   
-  <!-- Load Firebase Config & Main Script -->
+  <!-- Load Firebase Config and Main Script -->
   <script src="firebase-config.js"></script>
   <script src="script.js"></script>
 </body>
