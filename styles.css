@@ -20,7 +20,7 @@ body {
   border-radius: 10px;
 }
 
-/* Sidebar Styles for Dashboard and Dashboard2 */
+/* Sidebar for Dashboard & Dashboard2 */
 .sidebar {
   position: fixed;
   top: 0;
@@ -46,18 +46,16 @@ body {
   background: #e91e63;
 }
 
-/* Content Styles */
+/* Content Area Styles */
 .content {
   margin-left: 240px;
   padding: 20px;
 }
-
-/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255,255,255,0.9);
   color: black;
 }
 th, td {
