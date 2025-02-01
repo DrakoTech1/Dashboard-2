@@ -1,6 +1,6 @@
 console.log("✅ firebase-config.js loaded");
 
-// Firebase configuration – update with your actual config values
+// Firebase configuration – update these with your actual config values.
 const firebaseConfig = {
   apiKey: "AIzaSyDiNWtXm4oHQ6NpHPiLJjV4EDgU7yUQjq0",
   authDomain: "panel-auth-134b7.firebaseapp.com",
@@ -10,7 +10,7 @@ const firebaseConfig = {
   appId: "1:892746068340:web:f8c4d5b798e8bc48447c21"
 };
 
-// Initialize Firebase using compat libraries
+// Initialize Firebase using the compat libraries
 if (typeof firebase !== "undefined") {
   firebase.initializeApp(firebaseConfig);
   console.log("✅ Firebase initialized successfully");
