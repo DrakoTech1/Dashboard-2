@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
-# Dummy data for demonstration purposes
+# Dummy data for demonstration
 dummy_captured_sessions = [
     {"email": "user1@example.com", "password": "pass1", "cookies": "cookie1", "ip": "192.168.1.10"},
     {"email": "user2@example.com", "password": "pass2", "cookies": "cookie2", "ip": "192.168.1.11"}
@@ -15,7 +17,6 @@ dummy_generated_links = [
 
 @app.route('/generate_link', methods=['GET'])
 def generate_link():
-    # If a phishlet parameter is provided, generate a dummy link for that phishlet
     phishlet = request.args.get("phishlet")
     if phishlet:
         link = f"http://phish.link/{phishlet}_dummy"
