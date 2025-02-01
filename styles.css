@@ -15,12 +15,12 @@ body {
   height: 100vh;
 }
 .login-container {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   padding: 20px;
   border-radius: 10px;
 }
 
-/* Sidebar for Dashboard */
+/* Sidebar Styles for Dashboard and Dashboard2 */
 .sidebar {
   position: fixed;
   top: 0;
@@ -46,11 +46,13 @@ body {
   background: #e91e63;
 }
 
-/* Content area in Dashboard */
+/* Content Styles */
 .content {
   margin-left: 240px;
   padding: 20px;
 }
+
+/* Table Styles */
 table {
   width: 100%;
   border-collapse: collapse;
