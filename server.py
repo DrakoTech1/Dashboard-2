@@ -15,6 +15,11 @@ dummy_generated_links = [
     {"url": "http://phish.link/def456", "clicked_location": "UK", "ip": "203.0.113.2"}
 ]
 
+# ✅ Add a home route to test if the server is running
+@app.route("/", methods=["GET"])
+def home():
+    return jsonify({"message": "Welcome to Evilginx API"})
+
 @app.route('/generate_link', methods=['GET'])
 def generate_link():
     phishlet = request.args.get("phishlet")
