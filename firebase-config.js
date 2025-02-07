@@ -2,7 +2,7 @@ console.log("✅ firebase-config.js loaded");
 
 // Firebase configuration – update these with your actual config values.
 const firebaseConfig = {
-  apiKey: "AIzaSyDiNWtXm4oHQ6NpHPiLJjV4EDgU7yUQjq0",
+  apiKey: "  ",
   authDomain: "panel-auth-134b7.firebaseapp.com",
   projectId: "panel-auth-134b7",
   storageBucket: "panel-auth-134b7.firebasestorage.app",
