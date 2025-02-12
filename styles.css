@@ -1,3 +1,4 @@
+/* General Styles */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -6,7 +7,7 @@ body {
   color: white;
 }
 
-/* Login Page Styles */
+/* ---------- Login Page Styles ---------- */
 .login-body, .login-container {
   display: flex;
   flex-direction: column;
@@ -38,17 +39,50 @@ body {
   background: #0056b3;
 }
 
-/* Sidebar for Dashboard & Dashboard2 */
+/* ---------- Sidebar Menu for All Dashboards ---------- */
 .sidebar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 220px;
+  width: 250px;
   height: 100vh;
-  background: #222;
-  padding: 20px;
-  box-sizing: border-box;
+  background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
 }
+
+.sidebar h2 {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 10px 0;
+}
+
+.sidebar ul li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  transition: 0.3s;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.sidebar ul li a:hover, 
+.sidebar ul li a.active {
+  background: #ff4757;
+  transform: scale(1.05);
+}
+
+/* Sidebar Buttons for Dashboard */
 .menu-btn {
   display: block;
   width: 100%;
@@ -59,25 +93,192 @@ body {
   color: white;
   cursor: pointer;
   transition: background 0.3s ease;
+  font-size: 16px;
 }
+
 .menu-btn:hover {
   background: #e91e63;
 }
 
-/* Content Area Styles */
+/* Logout button */
+.logout-btn {
+  background: #d63031;
+  color: white;
+  padding: 12px 20px;
+  display: block;
+  text-align: center;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #ff6b6b;
+  transform: scale(1.05);
+}
+
+/* ---------- Main Content ---------- */
+.main-content {
+  margin-left: 270px;
+  padding: 20px;
+}
+
+/* ---------- Phishlet Buttons ---------- */
+.phishlet-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.phishlet-btn {
+  background: #2ed573;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.phishlet-btn:hover {
+  background: #1e90ff;
+  transform: scale(1.1);
+}
+
+/* ---------- Generated Link Display ---------- */
+.generated-link-display {
+  margin-top: 20px;
+  padding: 10px;
+  background: #f1f2f6;
+  border-radius: 5px;
+  font-weight: bold;
+  color: black;
+}
+
+/* ---------- Tables Styling ---------- */
 .content {
   margin-left: 240px;
   padding: 20px;
 }
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   color: black;
 }
+
 th, td {
   padding: 10px;
   border: 1px solid #ccc;
   text-align: center;
 }
+
+/* ---------- Login Page Animated Background ---------- */
+body.login-body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(45deg, 
+    hsl(0, 100%, 50%), 
+    hsl(60, 100%, 50%), 
+    hsl(120, 100%, 50%), 
+    hsl(180, 100%, 50%), 
+    hsl(240, 100%, 50%), 
+    hsl(300, 100%, 50%), 
+    hsl(360, 100%, 50%));
+  background-size: 200% 200%;
+  animation: gradientFade 30s ease infinite;
+}
+
+@keyframes gradientFade {
+  0% {
+    background-position: 0% 50%;
+  }
+  20% {
+    background-position: 25% 50%;
+  }
+  40% {
+    background-position: 50% 50%;
+  }
+  60% {
+    background-position: 75% 50%;
+  }
+  80% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ---------- Login Container Styles ---------- */
+.login-container {
+  background: rgba(0, 0, 0, 0.65);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  width: 90%;
+  max-width: 300px;
+}
+
+/* Optional: Fade-out exit animation for the login container */
+.login-container.exit-animation {
+  transition: opacity 1s ease, box-shadow 1s ease;
+  opacity: 0;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* ---------- Sidebar Menu for Dashboard3.html ---------- */
+#dashboard3-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: linear-gradient(135deg, #1e1e2f, #2c2c54);
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+#dashboard3-sidebar h2 {
+  color: white;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#dashboard3-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+#dashboard3-sidebar ul li {
+  margin: 10px 0;
+}
+
+#dashboard3-sidebar ul li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 12px 20px;
+  transition: 0.3s;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#dashboard3-sidebar ul li a:hover,
+#dashboard3-sidebar ul li a.active {
+  background: #ff4757;
+  transform: scale(1.05);
+}
+
+#dashboard3-main-content {
+  margin-left: 270px;
+  padding: 20px;
+}
+
+
