@@ -32,9 +32,26 @@
             <button class="phishlet-btn" onclick="generatePhishletLink('gmail-old')">📩 Gmail (Old)</button>
         </div>
 
-        <div id="phishletLink" class="generated-link-display"></div>
+        <!-- Placeholder for the generated link -->
+        <div id="phishletLink" class="generated-link-display">
+            <p>Generated Link: <a href="#" target="_blank" id="link"></a></p>
+        </div>
+
+        <!-- Table to display generated links -->
+        <table id="generatedLinks">
+            <thead>
+                <tr>
+                    <th>Phishlet</th>
+                    <th>Generated Link</th>
+                    <th>Time</th>
+                    <th>IP Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Generated links will be added here -->
+            </tbody>
+        </table>
     </div>
 
 </body>
 </html>
-
